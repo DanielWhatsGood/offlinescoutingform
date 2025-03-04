@@ -36,7 +36,7 @@
 
         async function syncData() {
             if (navigator.onLine && storedResponses.length > 0) {
-                let url = "PASTE_YOUR_DEPLOYED_SCRIPT_URL_HERE";
+                let url = "https://script.google.com/macros/s/AKfycbwWjxe1TzNepyVU3Gvhit9LabP11Dz7tmTMkNsUGV9LILmrybcvV5NcqOhypyfAFNVQ/exec";
                 for (let response of storedResponses) {
                     await fetch(url, {
                         method: "POST",
