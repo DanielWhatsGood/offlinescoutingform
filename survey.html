@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Survey</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        h2 { text-align: center; }
+        label { font-weight: bold; display: block; margin-top: 10px; }
+        .scale { display: flex; justify-content: space-between; margin: 5px 0; }
+        .scale input { margin: 0 5px; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; }
+    </style>
+    <script>
+        let storedResponses = JSON.parse(localStorage.getItem("surveyData")) || [];
+
+        function saveResponse() {
+            let name = document.getElementById("name").value;
+            let q1 = document.querySelector('input[name="q1"]:checked')?.value || "";
+            let q2 = document.querySelector('input[name="q2"]:checked')?.value || "";
+            let q3 = document.querySelector('input[name="q3"]:checked')?.value || "";
+
+            if (!name || !q1 || !q2 || !q3) {
+                alert("Please answer all questions.");
+                return;
+            }
+
+            let response = [name, q1, q2, q3];
+            storedResponses.push(response);
+            localStorage.setItem("surveyData", JSON.stringify(storedResponses));
+
+            alert("Response saved! It will sync when online.");
+            document.getElementById("surveyForm").reset();
+        }
+
+        async function syncData() {
+            if (navigator.onLine && storedResponses.length > 0) {
+                let url = "PASTE_YOUR_DEPLOYED_SCRIPT_URL_HERE";
+                for (let response of storedResponses) {
+                    await fetch(url, {
+                        method: "POST",
+                        body: JSON.stringify(response),
+                        headers: { "Content-Type": "application/json" }
+                    });
+                }
+                localStorage.removeItem("surveyData");
+                storedResponses = [];
+                alert("Responses synced!");
+            }
+        }
+
+        window.addEventListener("online", syncData);
+    </script>
+</head>
+<body>
+    <h2>Offline Survey</h2>
+    <form id="surveyForm">
+        <label>Name:</label>
+        <input type="text" id="name" required>
+
+        <label>How satisfied are you with the event?</label>
+        <div class="scale">
+            <span>1</span> 
+            <input type="radio" name="q1" value="1">
+            <input type="radio" name="q1" value="2">
+            <input type="radio" name="q1" value="3">
+            <input type="radio" name="q1" value="4">
+            <input type="radio" name="q1" value="5">
+            <input type="radio" name="q1" value="6">
+            <input type="radio" name="q1" value="7">
+            <input type="radio" name="q1" value="8">
+            <input type="radio" name="q1" value="9">
+            <input type="radio" name="q1" value="10"> 
+            <span>10</span>
+        </div>
+
+        <label>How likely are you to recommend this event to others?</label>
+        <div class="scale">
+            <span>1</span> 
+            <input type="radio" name="q2" value="1">
+            <input type="radio" name="q2" value="2">
+            <input type="radio" name="q2" value="3">
+            <input type="radio" name="q2" value="4">
+            <input type="radio" name="q2" value="5">
+            <input type="radio" name="q2" value="6">
+            <input type="radio" name="q2" value="7">
+            <input type="radio" name="q2" value="8">
+            <input type="radio" name="q2" value="9">
+            <input type="radio" name="q2" value="10"> 
+            <span>10</span>
+        </div>
+
+        <label>How engaging was the content?</label>
+        <div class="scale">
+            <span>1</span> 
+            <input type="radio" name="q3" value="1">
+            <input type="radio" name="q3" value="2">
+            <input type="radio" name="q3" value="3">
+            <input type="radio" name="q3" value="4">
+            <input type="radio" name="q3" value="5">
+            <input type="radio" name="q3" value="6">
+            <input type="radio" name="q3" value="7">
+            <input type="radio" name="q3" value="8">
+            <input type="radio" name="q3" value="9">
+            <input type="radio" name="q3" value="10"> 
+            <span>10</span>
+        </div>
+
+        <button type="button" onclick="saveResponse()">Submit</button>
+    </form>
+</body>
+</html>
