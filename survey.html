@@ -36,7 +36,7 @@
 
         async function syncData() {
             if (navigator.onLine && storedResponses.length > 0) {
-                let url = "https://script.google.com/macros/s/AKfycbwWjxe1TzNepyVU3Gvhit9LabP11Dz7tmTMkNsUGV9LILmrybcvV5NcqOhypyfAFNVQ/exec";
+                let url = "https://script.google.com/macros/s/AKfycbxPF0jHjTRWWILFEMVo0pj9-kNZqAuVdcOKC-azVZPpGf8aF99Zbb41c7qVt9HOQFpEHw/exec";
                 for (let response of storedResponses) {
                     await fetch(url, {
                         method: "POST",
